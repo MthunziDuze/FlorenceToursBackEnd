@@ -1,10 +1,11 @@
 require("dotenv").config();
+const userController = require("../controllers/user.controller");
 
 exports.loginUser = async (access_token) => {
-  const profileUrl = process.env.GOOGLE_PROFILE_URL;
-  const googleUserinfoUrl = `${profileUrl}?access_token=${access_token}`;
+  const googleUserinfoUrl = `${process.env.GOOGLE_PROFILE_URL}?access_token=${access_token}`;
 
   console.log("GoogleProfile url: ", googleUserinfoUrl);
+
   const response = await fetch(googleUserinfoUrl, {
     method: "Get",
     headers: {
@@ -15,10 +16,12 @@ exports.loginUser = async (access_token) => {
   });
   return handleResponse(response);
 };
+
+exports.signupUser = async (req, res) => {
+  return userController.createUser;
+};
 function handleResponse(response) {
   if (response.status == 200 || response.status == 201) {
-    const res = response.body;
-
     return response.json();
   }
   const errorMessage = response.text();
